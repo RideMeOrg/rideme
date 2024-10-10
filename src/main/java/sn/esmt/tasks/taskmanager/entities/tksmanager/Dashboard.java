@@ -157,4 +157,18 @@ public class Dashboard {
     public void setVoyage(boolean voyage) {
         this.voyage = voyage;
     }
+
+    public Dashboard(Date date, String heure, float tarif, String pointRencontre, String pointSeparation, int nombrePlace, boolean allerRetour, boolean prive, boolean statut, boolean voyage, UUID userId) {
+        this.date = date;
+        this.heure = heure;
+        this.tarif = tarif;
+        this.pointRencontre = pointRencontre;
+        this.pointSeparation = pointSeparation;
+        this.nombrePlace = nombrePlace;
+        this.allerRetour = allerRetour;
+        this.prive = prive;
+        this.statut = statut;
+        this.voyage = voyage;
+        this.userId = userId;
+    }
 }
