@@ -29,18 +29,18 @@ public class ShiftController {
     }
 
     @GetMapping("shift/{shiftId}")
-    public Dashboard getDashboard(@PathVariable UUID dashboardId) {
-        return this.tasksService.getDashboard(dashboardId);
+    public Dashboard getDashboard(@PathVariable UUID shiftId) {
+        return this.tasksService.getDashboard(shiftId);
     }
 
     @PutMapping("shift/{shiftId}")
-    public Dashboard updateDashboard(@PathVariable UUID dashboardId, @RequestBody @Valid Dashboard dashboard) {
-        return this.tasksService.updateDashboard(dashboardId, dashboard);
+    public Dashboard updateDashboard(@PathVariable UUID shiftId, @RequestBody @Valid Dashboard dashboard) {
+        return this.tasksService.updateDashboard(shiftId, dashboard);
     }
 
     @DeleteMapping("shift/{shiftId}")
-    public ApiResponse deleteDashboard(@PathVariable UUID dashboardId) {
-        return this.tasksService.deleteDashboard(dashboardId);
+    public ApiResponse deleteDashboard(@PathVariable UUID shiftId) {
+        return this.tasksService.deleteDashboard(shiftId);
     }
 //
 //    @GetMapping("dashboard/{dashboardId}/task-categories")
