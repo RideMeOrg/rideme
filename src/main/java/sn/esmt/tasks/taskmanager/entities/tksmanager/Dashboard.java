@@ -31,7 +31,7 @@ public class Dashboard {
     @NotNull
     private Date date;
 
-    private Time heure;
+    private String heure;
 
     private float tarif;
 
@@ -77,11 +77,11 @@ public class Dashboard {
         this.date = date;
     }
 
-    public Time getHeure() {
+    public String getHeure() {
         return heure;
     }
 
-    public void setHeure(Time heure) {
+    public void setHeure(String heure) {
         this.heure = heure;
     }
 
