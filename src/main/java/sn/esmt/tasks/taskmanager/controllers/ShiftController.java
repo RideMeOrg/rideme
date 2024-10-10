@@ -42,6 +42,36 @@ public class ShiftController {
     public ApiResponse deleteDashboard(@PathVariable UUID shiftId) {
         return this.tasksService.deleteDashboard(shiftId);
     }
+    // API pour rechercher les shifts par point de départ et point d'arrivée
+    @GetMapping("shift/search")
+    public List<Dashboard> getDashboardsByPoints(@RequestParam String pointRencontre, @RequestParam String pointSeparation) {
+        return this.tasksService.getDashboardsByPoints(pointRencontre, pointSeparation);
+    }
+    // API pour récupérer tous les shifts où il y a au moins une place libre
+    @GetMapping("shift/available")
+    public List<Dashboard> getDashboardsWithAvailableSeats() {
+        return tasksService.getDashboardsWithAvailableSeats();
+    }
+    // API to get shifts that are NOT voyages and have available seats
+    @GetMapping("shift/trajet/available")
+    public List<Dashboard> getNonVoyagesWithAvailableSeats() {
+        return tasksService.getNonVoyagesWithAvailableSeats();
+    }
+
+    // API to get shifts that ARE voyages and have available seats
+    @GetMapping("shift/voyages/available")
+    public List<Dashboard> getVoyagesWithAvailableSeats() {
+        return tasksService.getVoyagesWithAvailableSeats();
+    }
+    @GetMapping("shift/trajet/user/{userId}")
+    public List<Dashboard> getNonVoyagesByUserId(@PathVariable UUID userId) {
+        return tasksService.getNonVoyagesByUserId(userId);
+    }
+
+    @GetMapping("shift/voyages/user/{userId}")
+    public List<Dashboard> getVoyagesByUserId(@PathVariable UUID userId) {
+        return tasksService.getVoyagesByUserId(userId);
+    }
 //
 //    @GetMapping("dashboard/{dashboardId}/task-categories")
 //    public List<TaskCategory> getTaskCategoryByDashboard(@PathVariable UUID dashboardId) {

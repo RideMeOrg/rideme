@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import sn.esmt.tasks.taskmanager.dto.converters.ApiResponse;
 import sn.esmt.tasks.taskmanager.entities.MediaFile;
 import sn.esmt.tasks.taskmanager.entities.Profile;
+import sn.esmt.tasks.taskmanager.entities.User;
 import sn.esmt.tasks.taskmanager.entities.tksmanager.Dashboard;
 import sn.esmt.tasks.taskmanager.entities.tksmanager.TaskCategory;
 import sn.esmt.tasks.taskmanager.entities.tksmanager.TaskComment;
@@ -58,22 +59,22 @@ public class TasksServiceImpl implements TasksService {
     @Transactional
     @Override
     public Dashboard addDashboard(Dashboard dashboard) {
-        if (dashboardRepository.existsByPointRencontre(dashboard.getPointRencontre()) && dashboardRepository.existsByPointSeparation(dashboard.getPointSeparation())) {
-            throw new RequestNotAcceptableException("The shift is already created");
+        // S'assurer que nombrePlaceOccupee est défini à 0 par défaut si aucune valeur n'est fournie
+        if (dashboard.getNombrePlaceOccupee() == 0) {
+            dashboard.setNombrePlaceOccupee(0);
         }
-//        dashboard.setProfile(loggerUser.getCurrentProfile());
-        dashboard = dashboardRepository.save(dashboard);
 
-//        List<TaskCategory> taskCategories = taskCategoryRepository.findByDefaultTaskCategory(true);
-//        for (TaskCategory taskCategory : taskCategories) {
-//            entityManager.detach(taskCategory);
-//            taskCategory.setId(null);
-//            taskCategory.setDefaultTaskCategory(false);
-//            taskCategory.setDashboard(dashboard);
-//            taskCategoryRepository.save(taskCategory);
+        // Vérification d'existence d'un shift avec le même point de rencontre, de séparation et userId
+//        if (dashboardRepository.existsByPointRencontreAndPointSeparationAndUserId(
+//                dashboard.getPointRencontre(),
+//                dashboard.getPointSeparation(),
+//                dashboard.getUserId())) {
+//            throw new RequestNotAcceptableException("The shift is already created");
 //        }
-        return dashboard;
+
+        return dashboardRepository.save(dashboard);
     }
+
 
     @Override
     public Dashboard getDashboard(UUID dashboardId) {
@@ -106,6 +107,38 @@ public class TasksServiceImpl implements TasksService {
 //        }
         dashboardRepository.delete(dashboardDb);
         return new ApiResponse(true, "Shift deleted successfully");
+    }
+
+    // Implémentation de la méthode pour rechercher les shifts par point de départ et d'arrivée
+    @Override
+    public List<Dashboard> getDashboardsByPoints(String pointRencontre, String pointSeparation) {
+        return dashboardRepository.findByPointRencontreAndPointSeparation(pointRencontre, pointSeparation);
+    }
+    @Override
+    public List<Dashboard> getDashboardsWithAvailableSeats() {
+        return dashboardRepository.findDashboardsWithAvailableSeats();
+    }
+    // Shifts that are NOT voyages
+    @Override
+    public List<Dashboard> getNonVoyagesWithAvailableSeats() {
+        return dashboardRepository.findNonVoyagesWithAvailableSeats();
+    }
+
+    // Shifts that ARE voyages
+    @Override
+    public List<Dashboard> getVoyagesWithAvailableSeats() {
+        return dashboardRepository.findVoyagesWithAvailableSeats();
+    }
+    // Method to get shifts created by a specific userId that are NOT voyages
+    @Override
+    public List<Dashboard> getNonVoyagesByUserId(UUID userId) {
+        return dashboardRepository.findNonVoyagesByUserId(userId);
+    }
+
+    // Method to get shifts created by a specific userId that ARE voyages
+    @Override
+    public List<Dashboard> getVoyagesByUserId(UUID userId) {
+        return dashboardRepository.findVoyagesByUserId(userId);
     }
 
     @Override

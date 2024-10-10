@@ -18,6 +18,14 @@ public interface TasksService {
     Dashboard updateDashboard(UUID dashboardId, Dashboard dashboard);
 
     ApiResponse deleteDashboard(UUID dashboardId);
+    // Déclaration de la méthode pour rechercher par point de départ et d'arrivée
+    List<Dashboard> getDashboardsByPoints(String pointRencontre, String pointSeparation);
+    // Méthode pour récupérer les shifts avec des places disponibles
+    List<Dashboard> getDashboardsWithAvailableSeats();
+    List<Dashboard> getNonVoyagesWithAvailableSeats();
+    List<Dashboard> getVoyagesWithAvailableSeats();
+    List<Dashboard> getNonVoyagesByUserId(UUID userId);
+    List<Dashboard> getVoyagesByUserId(UUID userId);
 
     List<TaskCategory> getTaskCategoryByDashboard(UUID dashboardId);
 
