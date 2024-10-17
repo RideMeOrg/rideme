@@ -1,6 +1,7 @@
 package sn.esmt.tasks.taskmanager.entities.tksmanager;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -46,7 +47,7 @@ public class Dashboard {
     private boolean allerRetour;
 
     private boolean prive;
-
+    @JsonProperty("statut")
     private int statut;
 
     private boolean voyage;
@@ -168,4 +169,19 @@ public class Dashboard {
         this.nombrePlaceOccupee = nombrePlaceOccupee;
     }
 
+
+    public Dashboard(Date date, String heure, float tarif, String pointRencontre, String pointSeparation, int nombrePlace, boolean allerRetour, boolean prive, int statut, boolean voyage, int nombrePlaceOccupee, UUID userId) {
+        this.date = date;
+        this.heure = heure;
+        this.tarif = tarif;
+        this.pointRencontre = pointRencontre;
+        this.pointSeparation = pointSeparation;
+        this.nombrePlace = nombrePlace;
+        this.allerRetour = allerRetour;
+        this.prive = prive;
+        this.statut = statut;
+        this.voyage = voyage;
+        this.nombrePlaceOccupee = nombrePlaceOccupee;
+        this.userId = userId;
+    }
 }
