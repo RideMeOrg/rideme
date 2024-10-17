@@ -1,6 +1,7 @@
 package sn.esmt.tasks.taskmanager.services;
 
 import sn.esmt.tasks.taskmanager.dto.converters.ApiResponse;
+import sn.esmt.tasks.taskmanager.dto.converters.RouteRequest;
 import sn.esmt.tasks.taskmanager.entities.tksmanager.Dashboard;
 import sn.esmt.tasks.taskmanager.entities.tksmanager.TaskCategory;
 import sn.esmt.tasks.taskmanager.entities.tksmanager.TaskComment;
@@ -26,6 +27,7 @@ public interface TasksService {
     List<Dashboard> getVoyagesWithAvailableSeats();
     List<Dashboard> getNonVoyagesByUserId(UUID userId);
     List<Dashboard> getVoyagesByUserId(UUID userId);
+    String getPublicTransportRoute(RouteRequest routeRequest);
 
     List<TaskCategory> getTaskCategoryByDashboard(UUID dashboardId);
 

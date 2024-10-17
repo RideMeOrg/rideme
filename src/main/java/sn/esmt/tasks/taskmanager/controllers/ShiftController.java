@@ -1,7 +1,9 @@
 package sn.esmt.tasks.taskmanager.controllers;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sn.esmt.tasks.taskmanager.dto.converters.ApiResponse;
+import sn.esmt.tasks.taskmanager.dto.converters.RouteRequest;
 import sn.esmt.tasks.taskmanager.entities.tksmanager.Dashboard;
 import sn.esmt.tasks.taskmanager.services.TasksService;
 
@@ -71,6 +73,13 @@ public class ShiftController {
     @GetMapping("shift/voyages/user/{userId}")
     public List<Dashboard> getVoyagesByUserId(@PathVariable UUID userId) {
         return tasksService.getVoyagesByUserId(userId);
+    }
+
+    @PostMapping("/get-route")
+    public ResponseEntity<String> getPublicTransportRoute(
+            @RequestBody RouteRequest routeRequest) {
+        String routeResponse = tasksService.getPublicTransportRoute(routeRequest);
+        return ResponseEntity.ok(routeResponse);
     }
 //
 //    @GetMapping("dashboard/{dashboardId}/task-categories")

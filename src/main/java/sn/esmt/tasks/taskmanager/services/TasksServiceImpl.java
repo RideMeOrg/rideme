@@ -1,8 +1,15 @@
 package sn.esmt.tasks.taskmanager.services;
 
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 import sn.esmt.tasks.taskmanager.dto.converters.ApiResponse;
+import sn.esmt.tasks.taskmanager.dto.converters.RouteRequest;
 import sn.esmt.tasks.taskmanager.entities.MediaFile;
 import sn.esmt.tasks.taskmanager.entities.Profile;
 import sn.esmt.tasks.taskmanager.entities.User;
@@ -22,9 +29,7 @@ import sn.esmt.tasks.taskmanager.repositories.tksmanager.TasksRepository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class TasksServiceImpl implements TasksService {
@@ -36,6 +41,7 @@ public class TasksServiceImpl implements TasksService {
     private final MediaFileRepository mediaFileRepository;
     private final TaskCommentRepository taskCommentRepository;
     private final LoggerUser loggerUser;
+    private final String GOOGLE_MAPS_API_KEY = "AIzaSyC0WeR-cu0O7B-71NABjvI1hQiE1XEiY9k"; // Mets ta clé API ici
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -139,6 +145,42 @@ public class TasksServiceImpl implements TasksService {
     @Override
     public List<Dashboard> getVoyagesByUserId(UUID userId) {
         return dashboardRepository.findVoyagesByUserId(userId);
+    }
+
+    @Override
+    public String getPublicTransportRoute(RouteRequest routeRequest) {
+        String url = "https://routes.googleapis.com/directions/v2:computeRoutes";
+
+        // Créer le corps de la requête JSON
+        Map<String, Object> requestBody = new HashMap<>();
+        Map<String, String> origin = new HashMap<>();
+        origin.put("address", routeRequest.getOrigin());
+        Map<String, String> destination = new HashMap<>();
+        destination.put("address", routeRequest.getDestination());
+        requestBody.put("origin", origin);
+        requestBody.put("destination", destination);
+        requestBody.put("travelMode", routeRequest.getTravelMode());
+
+        Map<String, Object> transitPreferences = new HashMap<>();
+        transitPreferences.put("allowedTravelModes", routeRequest.getAllowedTravelModes());
+        requestBody.put("transitPreferences", transitPreferences);
+
+        // Appeler l'API Google Maps avec RestTemplate
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("X-Goog-Api-Key", GOOGLE_MAPS_API_KEY);
+        headers.set("X-Goog-FieldMask", "routes.legs.steps.transitDetails");
+
+        HttpEntity<Map<String, Object>> request = new HttpEntity<>(requestBody, headers);
+
+        try {
+            // Faire la requête POST à Google Maps
+            ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
+            return response.getBody();
+        } catch (RestClientException e) {
+            throw new RuntimeException("Error while calling Google Maps API", e);
+        }
     }
 
     @Override
