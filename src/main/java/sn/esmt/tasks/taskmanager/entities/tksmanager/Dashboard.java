@@ -1,5 +1,6 @@
 package sn.esmt.tasks.taskmanager.entities.tksmanager;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -29,6 +30,7 @@ public class Dashboard {
     private UUID id;
 
     @NotNull
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date date;
 
     private String heure;
