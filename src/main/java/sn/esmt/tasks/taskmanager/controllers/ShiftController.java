@@ -83,7 +83,7 @@ public class ShiftController {
     }
 
     @PutMapping("/shift/{id}/status")
-    public ResponseEntity<Dashboard> updateShiftStatus(@PathVariable UUID id, @RequestBody boolean statut) {
+    public ResponseEntity<Dashboard> updateShiftStatus(@PathVariable UUID id, @RequestBody int statut) {
         Dashboard updatedShift = tasksService.updateShiftStatus(id, statut);
         return ResponseEntity.ok(updatedShift);
     }

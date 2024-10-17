@@ -28,7 +28,7 @@ public interface TasksService {
     List<Dashboard> getNonVoyagesByUserId(UUID userId);
     List<Dashboard> getVoyagesByUserId(UUID userId);
     String getPublicTransportRoute(RouteRequest routeRequest);
-    Dashboard updateShiftStatus(UUID id, boolean newStatus);
+    Dashboard updateShiftStatus(UUID id, int newStatus);
 
     List<TaskCategory> getTaskCategoryByDashboard(UUID dashboardId);
 

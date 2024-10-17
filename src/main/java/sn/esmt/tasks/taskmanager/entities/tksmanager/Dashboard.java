@@ -47,7 +47,7 @@ public class Dashboard {
 
     private boolean prive;
 
-    private boolean statut;
+    private int statut;
 
     private boolean voyage;
     private int nombrePlaceOccupee = 0;  // Nouveau champ avec valeur par défaut à 0
@@ -145,11 +145,11 @@ public class Dashboard {
         this.prive = prive;
     }
 
-    public boolean isStatut() {
+    public int isStatut() {
         return statut;
     }
 
-    public void setStatut(boolean statut) {
+    public void setStatut(int statut) {
         this.statut = statut;
     }
 
