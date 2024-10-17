@@ -81,6 +81,12 @@ public class ShiftController {
         String routeResponse = tasksService.getPublicTransportRoute(routeRequest);
         return ResponseEntity.ok(routeResponse);
     }
+
+    @PutMapping("/shift/{id}/status")
+    public ResponseEntity<Dashboard> updateShiftStatus(@PathVariable UUID id, @RequestBody boolean statut) {
+        Dashboard updatedShift = tasksService.updateShiftStatus(id, statut);
+        return ResponseEntity.ok(updatedShift);
+    }
 //
 //    @GetMapping("dashboard/{dashboardId}/task-categories")
 //    public List<TaskCategory> getTaskCategoryByDashboard(@PathVariable UUID dashboardId) {

@@ -184,6 +184,15 @@ public class TasksServiceImpl implements TasksService {
     }
 
     @Override
+    public Dashboard updateShiftStatus(UUID id, boolean newStatus) {
+        Dashboard dashboard = dashboardRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Shift","id",id));
+
+        dashboard.setStatut(newStatus);
+        return dashboardRepository.save(dashboard);  // Sauvegarde et renvoie le shift modifié
+    }
+
+    @Override
     public List<TaskCategory> getTaskCategoryByDashboard(UUID dashboardId) {
         return taskCategoryRepository.findByDashboardId(dashboardId);
     }
