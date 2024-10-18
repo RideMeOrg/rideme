@@ -1,7 +1,10 @@
 package sn.esmt.tasks.taskmanager.controllers;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import sn.esmt.tasks.taskmanager.dto.converters.ApiResponse;
 import sn.esmt.tasks.taskmanager.dto.converters.RouteRequest;
 import sn.esmt.tasks.taskmanager.entities.tksmanager.Dashboard;
@@ -9,11 +12,16 @@ import sn.esmt.tasks.taskmanager.services.TasksService;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/api/shift-manager")
 public class ShiftController {
+
+    private static final String GOOGLE_MAPS_API_URL = "https://routes.googleapis.com/directions/v2:computeRoutes";
+    private static final String API_KEY = "AIzaSyC0WeR-cu0O7B-71NABjvI1hQiE1XEiY9k"; // Remplace avec ta clé API Google
+
     private final TasksService tasksService;
 
     public ShiftController(TasksService tasksService) {
@@ -86,6 +94,21 @@ public class ShiftController {
     public ResponseEntity<Dashboard> updateShiftStatus(@PathVariable UUID id, @RequestBody int statut) {
         Dashboard updatedShift = tasksService.updateShiftStatus(id, statut);
         return ResponseEntity.ok(updatedShift);
+    }
+
+    @PostMapping("/transitRoute")
+    public ResponseEntity<String> getTransitRoute(@RequestBody Map<String, Object> request) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+        headers.set("X-Goog-Api-Key", API_KEY);
+        headers.set("X-Goog-FieldMask", "routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline");
+
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(request, headers);
+
+        ResponseEntity<String> response = restTemplate.postForEntity(GOOGLE_MAPS_API_URL, entity, String.class);
+
+        return ResponseEntity.ok(response.getBody());
     }
 //
 //    @GetMapping("dashboard/{dashboardId}/task-categories")
