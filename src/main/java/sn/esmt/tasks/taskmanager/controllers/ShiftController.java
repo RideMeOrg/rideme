@@ -1,6 +1,8 @@
 package sn.esmt.tasks.taskmanager.controllers;
 
 import org.springframework.http.HttpEntity;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -97,7 +99,7 @@ public class ShiftController {
     }
 
     @PostMapping("/transitRoute")
-    public ResponseEntity<String> getTransitRoute(@RequestBody Map<String, Object> request) {
+    public ResponseEntity<JsonNode> getTransitRoute(@RequestBody Map<String, Object> request) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
@@ -108,7 +110,18 @@ public class ShiftController {
 
         ResponseEntity<String> response = restTemplate.postForEntity(GOOGLE_MAPS_API_URL, entity, String.class);
 
-        return ResponseEntity.ok(response.getBody());
+        try {
+            // Convertir la chaîne en JSON
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode jsonResponse = mapper.readTree(response.getBody());
+
+            // Renvoyer la réponse JSON
+            return ResponseEntity.ok(jsonResponse);
+
+        } catch (Exception e) {
+            // Gérer les erreurs de conversion JSON
+            return ResponseEntity.status(500).build();
+        }
     }
 //
 //    @GetMapping("dashboard/{dashboardId}/task-categories")
